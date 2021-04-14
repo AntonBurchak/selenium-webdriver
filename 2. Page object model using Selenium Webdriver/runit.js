@@ -1,6 +1,7 @@
 const { Builder } = require('selenium-webdriver');
 const { HomePage } = require('./pages/HomePage');
 
+
 async function testRegisterUser() {
     const driver = await new Builder().forBrowser('firefox').build();
     const Homepage = new HomePage(driver);
@@ -76,11 +77,9 @@ async function testLogOutUser() {
 
     await Homepage.logOutUser(userData);
 }
-// await testRegisterUser() // [error, because I'm already registered]
-
-testLoginUser() // +
+//  // [error, because I'm already registered]
+testRegisterUser()
+    .then(() => testLoginUser()) // + 
     .then(() => testAddingBirdToCart()) // +
     .then(() => testRemoveBirdFromCart()) // +
-    // .then(() => testLogOutUser())
-
-    // testRemoveBirdFromCart()
+    .then(() => testLogOutUser()) // +

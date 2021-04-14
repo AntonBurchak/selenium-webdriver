@@ -45,8 +45,8 @@ class HomePage {
         return this.driver.findElement(By.xpath("//img[@align='middle']/following-sibling::a"));
     }
 
-    get getSignOutButton() {
-
+    get getMyAccountButton() {
+        return this.driver.findElement(By.xpath("(//img[@align='middle']/following-sibling::a)[2]"));
     }
 
     async registerUser(userData) {
@@ -83,6 +83,39 @@ class HomePage {
             'Logout button is exist, login was success',)
     }
 
+    async logOutUser(userData) {
+        await this.open();
+        await this.signIn.click();
+
+        const currentUrl = await this.driver.getCurrentUrl();
+
+        console.log(currentUrl.includes(LoginPage.URL_MATCH));
+
+        if (currentUrl.includes(LoginPage.URL_MATCH)) {
+            const Loginpage = new LoginPage(this.driver);
+
+            await Loginpage.loginUser(userData);
+        }
+
+        const myAccountButton = await this.getMyAccountButton.isDisplayed();
+        let isMyAccountBtnMustBeEnabled = true;
+
+        Assert.isEqual(myAccountButton, isMyAccountBtnMustBeEnabled, 
+            'My Account button isn\'t exist, failed',
+            'My Account button is exist, login was been success :)',);
+
+        await this.getLogoutButton.click();
+
+        const myAccountButtonAfterLogout = 
+            await this.getMyAccountButton.isDisplayed() && await this.getMyAccountButton.getText() === 'My Account';
+
+        isMyAccountBtnMustBeEnabled = false;
+        
+        Assert.isEqual(myAccountButtonAfterLogout, isMyAccountBtnMustBeEnabled, 
+            'My Account button is exist, failed',
+            'My Account button isn\'t exist, success',);
+    }
+
     async addParrotToCart() {
         await this.open();
         await this.openBirdsPageButton.click();
@@ -111,20 +144,7 @@ class HomePage {
         }
     }
 
-    async logOutUser(userData) {
-        await this.open();
-        await this.signIn.click();
-
-        await this.usernameField.sendKeys(userData.username);
-        await this.passwordField.clear();
-        await this.passwordField.sendKeys(userData.password);
-
-        await this.getLoginButton.click();
-
-        // await this.driver.get('https://petstore.octoperf.com/actions/Catalog.action');
-
-        await this.getLogoutButton.click();
-    }
+    
 }
 
 module.exports = { HomePage };
