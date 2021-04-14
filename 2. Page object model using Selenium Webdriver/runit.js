@@ -78,7 +78,9 @@ async function testLogOutUser() {
 }
 // await testRegisterUser() // [error, because I'm already registered]
 
-testLoginUser()
-    // .then(() => testAddingBirdToCart())
-    // .then(() => testRemoveBirdFromCart())
+testLoginUser() // +
+    .then(() => testAddingBirdToCart()) // +
+    .then(() => testRemoveBirdFromCart()) // +
     // .then(() => testLogOutUser())
+
+    // testRemoveBirdFromCart()

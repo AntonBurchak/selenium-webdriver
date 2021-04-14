@@ -1,4 +1,5 @@
 const { By } = require('selenium-webdriver');
+const Assert = require('../assert');
 
 class ProductPage {
     constructor(driver) {
@@ -15,9 +16,14 @@ class ProductPage {
         return this.driver.findElement(By.xpath("(//div[@id='Catalog']//a)[2]"));
     }
 
+    
+
     async addParrotToCart() {
         await this.open();
         await this.getAddProductToCartButton.click();
+
+        
+        // Assert.isEqual()
     }
 }
 

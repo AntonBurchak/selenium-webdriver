@@ -105,6 +105,8 @@ class HomePage {
         if (currentUrl.includes(CartPage.URL_MATCH)) {
             const Cartpage = new CartPage(this.driver);
 
+            console.log('зашло в removeParrotFromCart')
+
             await Cartpage.removeParrotFromCart();
         }
     }
