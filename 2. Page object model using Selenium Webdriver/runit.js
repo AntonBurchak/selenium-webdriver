@@ -2,6 +2,15 @@ const { Builder } = require('selenium-webdriver');
 const { HomePage } = require('./pages/HomePage');
 
 
+const delayBeforeClosingByDefault = 1000;
+
+const waiter = (driver, delay = delayBeforeClosingByDefault) => new Promise((resolve, reject) => {
+    setTimeout(() => {
+        driver.close();
+        return resolve();
+    }, delay)
+})
+
 async function testRegisterUser() {
     const driver = await new Builder().forBrowser('firefox').build();
     const Homepage = new HomePage(driver);
@@ -34,6 +43,8 @@ async function testRegisterUser() {
         ...accountData,
         ...profileData
     });
+
+    await waiter(driver, 4000);
 };
 
 async function testLoginUser() {
@@ -50,6 +61,7 @@ async function testLoginUser() {
     await Homepage.loginUser({
         ...userData
     });
+    await waiter(driver);
 };
 
 async function testAddingBirdToCart() {
@@ -57,6 +69,7 @@ async function testAddingBirdToCart() {
     const Homepage = new HomePage(driver);
 
     await Homepage.addParrotToCart();
+    await waiter(driver);
 }
 
 async function testRemoveBirdFromCart() {
@@ -64,6 +77,7 @@ async function testRemoveBirdFromCart() {
     const Homepage = new HomePage(driver);
 
     await Homepage.removeParrotFromCart();
+    await waiter(driver);
 }
 
 async function testLogOutUser() {
@@ -76,10 +90,33 @@ async function testLogOutUser() {
     }
 
     await Homepage.logOutUser(userData);
+    await waiter(driver);
 }
-//  // [error, because I'm already registered]
-testRegisterUser()
-    .then(() => testLoginUser()) // + 
-    .then(() => testAddingBirdToCart()) // +
-    .then(() => testRemoveBirdFromCart()) // +
-    .then(() => testLogOutUser()) // +
+
+// testRegisterUser()
+//     .then(() => testLoginUser()) // + 
+//     .then(() => testAddingBirdToCart()) // +
+//     .then(() => testRemoveBirdFromCart()) // +
+//     .then(() => testLogOutUser()) // +
+
+    // Note:
+        // + beforeEach
+        // + negative
+
+async function testLoginUserNegative() {
+    // GIVEN
+    const driver = await new Builder().forBrowser('firefox').build();
+    const Homepage = new HomePage(driver);
+        
+    const wrongUserData = {
+        username: 'пєтойцвтацйолт',
+        password: 'qwerty',
+    }
+            
+    // WHEN
+    await Homepage.loginUser({
+        ...wrongUserData
+    }, true);
+};
+
+testLoginUserNegative();

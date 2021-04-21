@@ -82,6 +82,10 @@ class LoginPage {
         return this.driver.findElement(By.xpath("//input[@value='Save Account Information']"));
     }
 
+    get getFailedMessage() {
+        return this.driver.findElement(By.xpath("//ul[@class='messages']//li[1]"));
+    }
+
     async initializeValues(userData) {
         await this.getUserIdField.sendKeys(userData.username);
         await this.getPasswordField.sendKeys(userData.password);
@@ -112,7 +116,7 @@ class LoginPage {
         await this.getRegisterButton.click();
     }
 
-    async loginUser(userData) { 
+    async loginUser(userData, isNegative = false) { 
         await this.open();
         
         await this.usernameField.sendKeys(userData.username);
@@ -120,6 +124,7 @@ class LoginPage {
         await this.passwordField.sendKeys(userData.password);
 
         // THEN
+    
         await (async () => {
             const actualUsername = await this.usernameField.getAttribute("value");
             const actualPassword = await this.passwordField.getAttribute("value");
@@ -129,6 +134,34 @@ class LoginPage {
         })();
 
         await this.getLoginButton.click();
+
+        const failureMessageExist = await this.getFailedMessage.isDisplayed();
+        const failureMessageText = await this.getFailedMessage.getText();
+
+        const expectedFailureMessage = 'Invalid username or password. Signon failed.';
+
+        if (isNegative) {
+            Assert.isEqual(failureMessageExist, true, 
+                'Failed, failure message isn\'t exist',
+                'Success, failure message exist when we using wrong userdata');
+            Assert.isEqual(failureMessageText, expectedFailureMessage, 
+                'Failed, failure message isn\'t correct',
+                'Success, failure message correct when we using wrong userdata');
+        }
+    }
+
+    async logOutUser(userData) { 
+        await this.open();
+        
+        await this.usernameField.sendKeys(userData.username);
+        await this.passwordField.clear();
+        await this.passwordField.sendKeys(userData.password);
+
+        await this.getLoginButton.click();
+
+        // await this.driver.get('https://petstore.octoperf.com/actions/Catalog.action');
+
+        
     }
 }
 

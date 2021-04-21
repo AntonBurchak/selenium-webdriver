@@ -64,7 +64,7 @@ class HomePage {
         }
     }
 
-    async loginUser(userData) { // success
+    async loginUser(userData, isNegative) { // success
         await this.open();
         await this.signIn.click();
 
@@ -73,7 +73,7 @@ class HomePage {
         if (currentUrl.includes(LoginPage.URL_MATCH)) {
             const Loginpage = new LoginPage(this.driver);
 
-            await Loginpage.loginUser(userData);
+            await Loginpage.loginUser(userData, isNegative);
         }
 
         const logoutButtonExists = await this.getLogoutButton.isDisplayed();
