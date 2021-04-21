@@ -93,16 +93,6 @@ async function testLogOutUser() {
     await waiter(driver);
 }
 
-// testRegisterUser()
-//     .then(() => testLoginUser()) // + 
-//     .then(() => testAddingBirdToCart()) // +
-//     .then(() => testRemoveBirdFromCart()) // +
-//     .then(() => testLogOutUser()) // +
-
-    // Note:
-        // + beforeEach
-        // + negative
-
 async function testLoginUserNegative() {
     // GIVEN
     const driver = await new Builder().forBrowser('firefox').build();
@@ -117,6 +107,19 @@ async function testLoginUserNegative() {
     await Homepage.loginUser({
         ...wrongUserData
     }, true);
+
+    await waiter(driver);
 };
 
-testLoginUserNegative();
+
+
+testRegisterUser()
+    .then(() => testLoginUser()) // + 
+    .then(() => testAddingBirdToCart()) // +
+    .then(() => testRemoveBirdFromCart()) // +
+    .then(() => testLogOutUser()) // +
+    .then(() => testLoginUserNegative())
+
+    // Note:
+        // + beforeEach
+        // + negative

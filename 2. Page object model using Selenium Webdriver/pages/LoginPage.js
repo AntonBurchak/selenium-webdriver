@@ -135,12 +135,13 @@ class LoginPage {
 
         await this.getLoginButton.click();
 
-        const failureMessageExist = await this.getFailedMessage.isDisplayed();
-        const failureMessageText = await this.getFailedMessage.getText();
-
-        const expectedFailureMessage = 'Invalid username or password. Signon failed.';
-
         if (isNegative) {
+            const failureMessageExist = await this.getFailedMessage.isDisplayed();
+            const failureMessageText = await this.getFailedMessage.getText();
+
+            const expectedFailureMessage = 'Invalid username or password. Signon failed.';
+
+
             Assert.isEqual(failureMessageExist, true, 
                 'Failed, failure message isn\'t exist',
                 'Success, failure message exist when we using wrong userdata');
